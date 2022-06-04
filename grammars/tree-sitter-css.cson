@@ -60,6 +60,7 @@ scopes:
     "@namespace",
     "@supports",
     "@keyframes",
+    "@layer",
     at_keyword
   ': 'keyword.control.at-rule'
 

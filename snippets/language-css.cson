@@ -22,6 +22,11 @@
     'body': '@keyframes ${1:identifier} {\n\t$2\n}$0'
     'description': 'Specifies a CSS animation.'
     'descriptionMoreURL': 'https://developer.mozilla.org/en/docs/Web/CSS/@keyframes'
+  '@layer':
+    'prefix': 'layer'
+    'body': '@layer ${1:identifier} {\n\t$2\n}$0'
+    'description': 'Declare a cascade layer.'
+    'descriptionMoreURL': 'https://developer.mozilla.org/en-US/docs/Web/CSS/@layer'
   '@media':
     'prefix': 'media'
     'body': '@media ${1:query} {\n\t$2\n}$0'
@@ -45,6 +50,8 @@
     'prefix': 'import'
   '@keyframes':
     'prefix': 'keyframes'
+  '@layer':
+    'prefix': 'layer'
   '@media':
     'prefix': 'media'
   '@supports':

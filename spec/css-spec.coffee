@@ -799,6 +799,62 @@ describe 'CSS grammar', ->
           expect(tokens[18]).toEqual value: ')', scopes: ['source.css', 'meta.at-rule.import.css', 'punctuation.definition.parameters.end.bracket.round.css']
           expect(tokens[19]).toEqual value: ';', scopes: ['source.css', 'meta.at-rule.import.css', 'punctuation.terminator.rule.css']
 
+        it 'highlights cascade layers', ->
+          {tokens} = grammar.tokenizeLine('@import url("3.css") layer(A.B);')
+          expect(tokens[0]).toEqual value: '@', scopes: ['source.css', 'meta.at-rule.import.css', 'keyword.control.at-rule.import.css', 'punctuation.definition.keyword.css']
+          expect(tokens[1]).toEqual value: 'import', scopes: ['source.css', 'meta.at-rule.import.css', 'keyword.control.at-rule.import.css']
+          expect(tokens[3]).toEqual value: 'url', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'support.function.url.css']
+          expect(tokens[4]).toEqual value: '(', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'punctuation.section.function.begin.bracket.round.css']
+          expect(tokens[5]).toEqual value: '"', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'string.quoted.double.css', 'punctuation.definition.string.begin.css']
+          expect(tokens[6]).toEqual value: '3.css', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'string.quoted.double.css']
+          expect(tokens[7]).toEqual value: '"', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'string.quoted.double.css', 'punctuation.definition.string.end.css']
+          expect(tokens[8]).toEqual value: ')', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'punctuation.section.function.end.bracket.round.css']
+          expect(tokens[9]).toEqual value: ' ', scopes: ['source.css', 'meta.at-rule.import.css']
+          expect(tokens[10]).toEqual value: 'layer', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.layer.css', 'support.function.layer.css']
+          expect(tokens[11]).toEqual value: '(', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.layer.css', 'punctuation.section.function.begin.bracket.round.css']
+          expect(tokens[12]).toEqual value: 'A.B', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'punctuation.section.function.begin.bracket.round.css']
+          expect(tokens[14]).toEqual value: ';', scopes: ['source.css', 'meta.at-rule.import.css', 'punctuation.terminator.rule.css']
+
+          {tokens} = grammar.tokenizeLine('@import url("3.css") print layer(A.B) /* url(";"); */;')
+          expect(tokens[0]).toEqual value: '@', scopes: ['source.css', 'meta.at-rule.import.css', 'keyword.control.at-rule.import.css', 'punctuation.definition.keyword.css']
+          expect(tokens[1]).toEqual value: 'import', scopes: ['source.css', 'meta.at-rule.import.css', 'keyword.control.at-rule.import.css']
+          expect(tokens[3]).toEqual value: 'url', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'support.function.url.css']
+          expect(tokens[4]).toEqual value: '(', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'punctuation.section.function.begin.bracket.round.css']
+          expect(tokens[5]).toEqual value: '"', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'string.quoted.double.css', 'punctuation.definition.string.begin.css']
+          expect(tokens[6]).toEqual value: '3.css', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'string.quoted.double.css']
+          expect(tokens[7]).toEqual value: '"', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'string.quoted.double.css', 'punctuation.definition.string.end.css']
+          expect(tokens[8]).toEqual value: ')', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'punctuation.section.function.end.bracket.round.css']
+          expect(tokens[10]).toEqual value: 'print', scopes: ['source.css', 'meta.at-rule.import.css', 'support.constant.media.css']
+          expect(tokens[12]).toEqual value: 'layer', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.layer.css', 'support.function.layer.css']
+          expect(tokens[13]).toEqual value: '(', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.layer.css', 'punctuation.section.function.begin.bracket.round.css']
+          expect(tokens[14]).toEqual value: 'A.B', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'punctuation.section.function.begin.bracket.round.css']
+          expect(tokens[16]).toEqual value: '/*', scopes: ['source.css', 'meta.at-rule.import.css', 'comment.block.css', 'punctuation.definition.comment.begin.css']
+          expect(tokens[17]).toEqual value: ' url(";"); ', scopes: ['source.css', 'meta.at-rule.import.css', 'comment.block.css']
+          expect(tokens[18]).toEqual value: '*/', scopes: ['source.css', 'meta.at-rule.import.css', 'comment.block.css', 'punctuation.definition.comment.end.css']
+          expect(tokens[19]).toEqual value: ';', scopes: ['source.css', 'meta.at-rule.import.css', 'punctuation.terminator.rule.css']
+
+          {tokens} = grammar.tokenizeLine('@import url("3.css") print and (min-width: 200px) layer(A.B) /* url(";"); */;')
+          expect(tokens[0]).toEqual value: '@', scopes: ['source.css', 'meta.at-rule.import.css', 'keyword.control.at-rule.import.css', 'punctuation.definition.keyword.css']
+          expect(tokens[1]).toEqual value: 'import', scopes: ['source.css', 'meta.at-rule.import.css', 'keyword.control.at-rule.import.css']
+          expect(tokens[3]).toEqual value: 'url', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'support.function.url.css']
+          expect(tokens[4]).toEqual value: '(', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'punctuation.section.function.begin.bracket.round.css']
+          expect(tokens[5]).toEqual value: '"', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'string.quoted.double.css', 'punctuation.definition.string.begin.css']
+          expect(tokens[6]).toEqual value: '3.css', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'string.quoted.double.css']
+          expect(tokens[7]).toEqual value: '"', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'string.quoted.double.css', 'punctuation.definition.string.end.css']
+          expect(tokens[8]).toEqual value: ')', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'punctuation.section.function.end.bracket.round.css']
+          expect(tokens[10]).toEqual value: 'print', scopes: ['source.css', 'meta.at-rule.import.css', 'support.constant.media.css']
+          expect(tokens[12]).toEqual value: 'and', scopes: ['source.css', 'meta.at-rule.import.css', 'keyword.operator.logical.and.media.css']
+          expect(tokens[14]).toEqual value: '(', scopes: ['source.css', 'meta.at-rule.import.css', 'punctuation.definition.parameters.begin.bracket.round.css']
+          expect(tokens[15]).toEqual value: 'min-width', scopes: ['source.css', 'meta.at-rule.import.css', 'support.type.property-name.media.css']
+          expect(tokens[20]).toEqual value: ')', scopes: ['source.css', 'meta.at-rule.import.css', 'punctuation.definition.parameters.end.bracket.round.css']
+          expect(tokens[22]).toEqual value: 'layer', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.layer.css', 'support.function.layer.css']
+          expect(tokens[23]).toEqual value: '(', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.layer.css', 'punctuation.section.function.begin.bracket.round.css']
+          expect(tokens[24]).toEqual value: 'A.B', scopes: ['source.css', 'meta.at-rule.import.css', 'meta.function.url.css', 'punctuation.section.function.begin.bracket.round.css']
+          expect(tokens[26]).toEqual value: '/*', scopes: ['source.css', 'meta.at-rule.import.css', 'comment.block.css', 'punctuation.definition.comment.begin.css']
+          expect(tokens[27]).toEqual value: ' url(";"); ', scopes: ['source.css', 'meta.at-rule.import.css', 'comment.block.css']
+          expect(tokens[28]).toEqual value: '*/', scopes: ['source.css', 'meta.at-rule.import.css', 'comment.block.css', 'punctuation.definition.comment.end.css']
+          expect(tokens[29]).toEqual value: ';', scopes: ['source.css', 'meta.at-rule.import.css', 'punctuation.terminator.rule.css']
+
       describe '@media', ->
         it 'tokenises @media keywords correctly', ->
           {tokens} = grammar.tokenizeLine('@media(max-width: 37.5em) { }')
@@ -1186,6 +1242,17 @@ describe 'CSS grammar', ->
           expect(tokens[3]).toEqual value: 'A', scopes: ['source.css', 'meta.at-rule.keyframes.header.css', 'variable.parameter.keyframe-list.css']
           expect(tokens[4]).toEqual value: '\\1F602', scopes: ['source.css', 'meta.at-rule.keyframes.header.css', 'variable.parameter.keyframe-list.css', 'constant.character.escape.codepoint.css']
           expect(tokens[5]).toEqual value: 'Z', scopes: ['source.css', 'meta.at-rule.keyframes.header.css', 'variable.parameter.keyframe-list.css']
+
+      describe '@layer', ->
+        it 'tokenises layer lists correctly', ->
+          lines = grammar.tokenizeLines """
+            @layer A.B {
+              .selector {
+                property: value;
+              }
+            }
+          """
+          expect(lines[0][0]).toEqual value: '@', scopes: ['source.css', 'meta.at-rule.layer.header.css', 'keyword.control.at-rule.layer.css', 'punctuation.definition.keyword.css']
 
       describe '@supports', ->
         it 'tokenises feature queries', ->
